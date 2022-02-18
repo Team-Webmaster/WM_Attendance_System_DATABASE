@@ -35,7 +35,7 @@ CREATE TABLE pendingUserTable(
 );
 
 CREATE TABLE blackListedEmails(
-	email varchar(50),
+	email varchar(70),
 	constraint PK_blackListedEmails primary key(email)
 );
 
