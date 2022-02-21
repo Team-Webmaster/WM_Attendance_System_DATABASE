@@ -31,11 +31,12 @@ CREATE TABLE pendingUserTable(
 	profile_pic varchar(200),
 	type int,
 	no_of_annual_leaves int,
+	status varchar(15),
 	constraint PK_pending_user primary key(pending_user_id)
 );
 
 CREATE TABLE blackListedEmails(
-	email varchar(70),
+	email varchar(50),
 	constraint PK_blackListedEmails primary key(email)
 );
 
@@ -287,4 +288,31 @@ BEGIN
 	WHERE no_of_annual_leaves=@oldNoOfLeaves
 END
 
-SELECT * FROM pendingUserTable
+CREATE TRIGGER NewUserAdd
+ON pendingUserTable
+INSTEAD OF UPDATE
+AS
+BEGIN
+	DECLARE @status varchar(15)
+	DECLARE @email varchar(70)
+	SELECT @email=email,@status=status FROM inserted
+	IF @status='Approved'
+	BEGIN
+		DECLARE @name varchar(75)
+		DECLARE @nic varchar(15)
+		DECLARE @password varchar(70)
+		DECLARE @address varchar(100)
+		DECLARE @telephone varchar(13)
+		DECLARE @profile_pic varchar(200)
+		DECLARE @type int
+		DECLARE @no_of_annual_leaves int
+		SELECT @name=name,@nic=nic,@password=password,@address=address,@telephone=telephone,@profile_pic=profile_pic,@type=type,@no_of_annual_leaves=no_of_annual_leaves FROM inserted
+		INSERT INTO userTable VALUES(@name,@nic,@email,@password,@address,@telephone,@profile_pic,@type,@no_of_annual_leaves)
+		DELETE FROM pendingUserTable WHERE email=@email
+	END
+	ELSE IF @status='Rejected'
+	BEGIN
+		INSERT INTO blackListedEmails VALUES(@email)
+		DELETE FROM pendingUserTable WHERE email=@email
+	END
+END
