@@ -32,6 +32,7 @@ CREATE TABLE pendingUserTable(
 	type int,
 	no_of_annual_leaves int,
 	status varchar(15),
+        confirm int,
 	constraint PK_pending_user primary key(pending_user_id)
 );
 
