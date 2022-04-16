@@ -164,6 +164,7 @@ CREATE TABLE LeaveDetails(
 	time Time,
 	duration real,
 	special_note varchar(100),
+	status varchar(15),
 	approval_id int,
 	leave_type_id int,
 	constraint PK_LeaveDetails primary key(leave_id),
