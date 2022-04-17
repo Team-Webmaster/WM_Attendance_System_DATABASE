@@ -162,15 +162,16 @@ CREATE TABLE Leave(
 CREATE TABLE Request(
 	request_id int identity(1,1),
 	date Date,
-	time Time,
-	status varchar(10),
+	type varchar(15),
+	duration real,
+	special_note varchar(100),
 	sender_id int,
 	leave_type_id int,
+	status varchar(15),
 	approval_id int,
 	constraint PK_Request primary key(request_id),
-	constraint FK1_Request foreign key(sender_id) references userTable(user_id),
-	constraint FK2_Request foreign key(leave_type_id) references Leave(id),
-	constraint FK3_Request foreign key(approval_id) references userTable(user_id)
+	constraint FK1_Request foreign key(leave_type_id) references Leave(id),
+	constraint FK2_Request foreign key(sender_id) references userTable(user_id)
 );
 
 CREATE TABLE LeaveDetails(
@@ -179,16 +180,14 @@ CREATE TABLE LeaveDetails(
 	type varchar(15),
 	duration real,
 	special_note varchar(100),
-	status varchar(15),
-	requester_id int,
-	approval_id int,
+	sender_id int,
 	leave_type_id int,
+	approval_id int,
 	constraint PK_LeaveDetails primary key(leave_id),
-	constraint with FK1_LeaveDetails foreign key(approval_id) references userTable(user_id),
+	constraint FK1_LeaveDetails foreign key(approval_id) references userTable(user_id),
 	constraint FK2_LeaveDetails foreign key(leave_type_id) references Leave(id),
-	constraint FK3_LeaveDetails foreign key(requester_id) references userTable(user_id),
+	constraint FK3_LeaveDetails foreign key(sender_id) references userTable(user_id)
 );
-ALTER TABLE LeaveDetails NOCHECK CONSTRAINT FK1_LeaveDetails
 
 CREATE TABLE LeaveCalendarEvent(
 	id int identity(1,1),
