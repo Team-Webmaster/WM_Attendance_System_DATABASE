@@ -161,7 +161,7 @@ CREATE TABLE Request(
 CREATE TABLE LeaveDetails(
 	leave_id int identity(1,1),
 	date Date,
-	time Time,
+	type varchar(15),
 	duration real,
 	special_note varchar(100),
 	status varchar(15),
