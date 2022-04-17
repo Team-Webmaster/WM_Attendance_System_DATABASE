@@ -41,6 +41,20 @@ CREATE TABLE blackListedEmails(
 	constraint PK_blackListedEmails primary key(email)
 );
 
+CREATE TABLE shortLeaveDetails(
+	id int identity(1,1),
+	date Date,
+	start_time Time,
+	end_time Time,
+	special_notes varchar(100),
+	requester_id int,
+	approval_id int,
+	constraint PK_shortLeaveDetails primary key(id),
+	constraint FK1_shortLeaveDetails foreign key requester_id reference userTable(user_id),
+	constraint with nocheck FK2_shortLeaveDetails foreign key approval_id reference userTable(user_id)
+)
+ALTER TABLE shortLeaveDetails NOCHECK CONSTRAINT FK2_shortLeaveDetails;
+
 CREATE TABLE Attendance(
 	id int identity(1,1),
 	date Date,
@@ -165,12 +179,15 @@ CREATE TABLE LeaveDetails(
 	duration real,
 	special_note varchar(100),
 	status varchar(15),
+	requester_id int,
 	approval_id int,
 	leave_type_id int,
 	constraint PK_LeaveDetails primary key(leave_id),
-	constraint FK1_LeaveDetails foreign key(approval_id) references userTable(user_id),
-	constraint FK2_LeaveDetails foreign key(leave_type_id) references Leave(id)
+	constraint with FK1_LeaveDetails foreign key(approval_id) references userTable(user_id),
+	constraint FK2_LeaveDetails foreign key(leave_type_id) references Leave(id),
+	constraint FK3_LeaveDetails foreign key(requester_id) references userTable(user_id),
 );
+ALTER TABLE LeaveDetails NOCHECK CONSTRAINT FK1_LeaveDetails
 
 CREATE TABLE LeaveCalendarEvent(
 	id int identity(1,1),
