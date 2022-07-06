@@ -68,8 +68,8 @@ CREATE TABLE emergencyLeaveDetails(
 CREATE TABLE Attendance(
 	id int identity(1,1),
 	date Date,
-	in_time Time,
-	out_time Time,
+	in_time varchar(7),
+	out_time varchar(7),
 	type varchar(10),
 	u_id int,
 	constraint PK_Attendance primary key(id),
